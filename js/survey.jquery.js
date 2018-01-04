@@ -160,8 +160,8 @@ var surveyLocalization = {
     }
 };
 var surveyStrings = {
-    pagePrevText: "Previous",
-    pageNextText: "Next",
+    pagePrevText: "Back",
+    pageNextText: "Continue",
     completeText: "Complete",
     startSurveyText: "Start",
     otherItemText: "Other (describe)",
@@ -2747,10 +2747,14 @@ var Question = (function (_super) {
             var requireText = this.requiredText;
             if (requireText)
                 requireText += " ";
+            var optionalText = ''
+            if (!this.isRequired) {
+                optionalText = ' (optional)'
+            }
             var no = this.no;
             if (no)
                 no += ". ";
-            return no + requireText + this.processedTitle;
+            return no + requireText + this.processedTitle + optionalText;
         },
         enumerable: true,
         configurable: true
@@ -3568,7 +3572,7 @@ var defaultStandardCss = {
     navigation: {
         complete: "sv_complete_btn",
         prev: "sv_prev_btn",
-        next: "sv_next_btn",
+        next: "sv_next_btn button",
         start: "sv_start_btn"
     },
     progress: "sv_progress",
@@ -3579,12 +3583,12 @@ var defaultStandardCss = {
         description: ""
     },
     // TODO: move to the page object
-    pageTitle: "sv_page_title",
+    pageTitle: "sv_page_title heading-large",
     pageDescription: "",
     row: "sv_row",
     question: {
-        mainRoot: "sv_q sv_qstn",
-        title: "sv_q_title",
+        mainRoot: "sv_q sv_qstn form-group",
+        title: "sv_q_title form-label-bold",
         description: "sv_q_description",
         comment: "",
         required: "",
@@ -3593,11 +3597,11 @@ var defaultStandardCss = {
         footer: "sv_q_footer"
     },
     panel: { title: "sv_p_title", description: "", container: "sv_p_container" },
-    error: { root: "sv_q_erbox", icon: "", item: "" },
+    error: { root: "sv_q_erbox error-message", icon: "", item: "" },
     boolean: { root: "sv_qcbc sv_qbln", item: "sv_q_checkbox" },
     checkbox: {
         root: "sv_qcbc sv_qcbx",
-        item: "sv_q_checkbox",
+        item: "sv_q_checkbox multiple-choice",
         label: "sv_q_checkbox_label",
         itemControl: "sv_q_checkbox_control_item",
         controlLabel: "sv_q_checkbox_control_label",
@@ -3625,7 +3629,7 @@ var defaultStandardCss = {
     },
     radiogroup: {
         root: "sv_qcbc",
-        item: "sv_q_radiogroup",
+        item: "sv_q_radiogroup multiple-choice",
         label: "sv_q_radiogroup_label",
         itemControl: "sv_q_radiogroup_control_item",
         controlLabel: "",
@@ -5599,7 +5603,7 @@ var SurveyModel = (function (_super) {
          * @see QuestionBase.title
          */
         get: function () {
-            return this.getPropertyValue("requiredText", "*");
+            return this.getPropertyValue("requiredText", "");
         },
         set: function (val) {
             this.setPropertyValue("requiredText", val);
@@ -7864,7 +7868,7 @@ __WEBPACK_IMPORTED_MODULE_1__jsonobject__["a" /* JsonObject */].metaData.addClas
     { name: "pagePrevText", serializationProperty: "locPagePrevText" },
     { name: "pageNextText", serializationProperty: "locPageNextText" },
     { name: "completeText", serializationProperty: "locCompleteText" },
-    { name: "requiredText", default: "*" },
+    { name: "requiredText", default: "" },
     "questionStartIndex",
     {
         name: "questionTitleTemplate",
@@ -9831,6 +9835,8 @@ var MatrixDropdownColumn = (function (_super) {
             if (requireText)
                 requireText += " ";
             str = requireText + str;
+        } else {
+            str += ' (optional)';
         }
         return str;
     };
@@ -15312,7 +15318,7 @@ var defaultBootstrapCss = {
     pageDescription: "small",
     row: "",
     question: {
-        mainRoot: "sv_qstn",
+        mainRoot: "sv_qstn form-group",
         title: "",
         description: "small",
         comment: "form-control",
@@ -20703,14 +20709,15 @@ var SurveyQuestionCheckboxItem = (function (_super) {
     });
     SurveyQuestionCheckboxItem.prototype.renderCheckbox = function (isChecked, divStyle, otherItem) {
         var id = this.isFirst ? this.question.inputId : null;
+        var inputId = this.isFirst ? this.question.inputId : this.question.inputId + this.item.value
         var text = this.renderLocString(this.item.locText);
         var itemClass = this.cssClasses.item +
             (this.question.colCount === 0 ? " sv_q_checkbox_inline" : "");
         if (isChecked)
             itemClass += " checked";
         return (__WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("div", { className: itemClass, style: divStyle },
-            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("label", { className: this.cssClasses.label },
-                __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("input", { className: this.cssClasses.itemControl, type: "checkbox", value: this.item.value, id: id, style: this.inputStyle, disabled: this.isDisplayMode, checked: isChecked, onChange: this.handleOnChange, "aria-label": this.question.locTitle.renderedHtml }),
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("input", { className: this.cssClasses.itemControl, type: "checkbox", value: this.item.value, id: inputId, style: this.inputStyle, disabled: this.isDisplayMode, checked: isChecked, onChange: this.handleOnChange, "aria-label": this.question.locTitle.renderedHtml }),
+            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("label", { className: this.cssClasses.label, htmlFor: inputId },
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: "checkbox-material" },
                     __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: "check" })),
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: this.cssClasses.controlLabel }, text)),
@@ -21670,14 +21677,15 @@ var SurveyQuestionRadiogroup = (function (_super) {
     };
     SurveyQuestionRadiogroup.prototype.renderRadio = function (key, item, isChecked, divStyle, otherItem, isFirst, cssClasses) {
         var id = isFirst ? this.question.inputId : null;
+        var inputId = isFirst ? this.question.inputId : this.question.inputId + (item.value ? item.value : 'null');
         var itemText = this.renderLocString(item.locText, this.textStyle);
         var itemClass = cssClasses.item +
             (this.question.colCount === 0 ? " sv_q_radiogroup_inline" : "");
         if (isChecked)
             itemClass += " checked";
         return (__WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("div", { key: key, className: itemClass, style: divStyle },
-            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("label", { className: cssClasses.label },
-                __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("input", { className: cssClasses.itemControl, id: id, type: "radio", name: this.question.name + "_" + this.questionBase.id, checked: isChecked, value: item.value, disabled: this.isDisplayMode, onChange: this.handleOnChange, "aria-label": this.question.locTitle.renderedHtml }),
+        __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("input", { className: cssClasses.itemControl, id: inputId, type: "radio", name: this.question.name + "_" + this.questionBase.id, checked: isChecked, value: item.value, disabled: this.isDisplayMode, onChange: this.handleOnChange, "aria-label": this.question.locTitle.renderedHtml }),
+            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("label", { className: cssClasses.label, htmlFor: inputId },
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: "circle" }),
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: "check" }),
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("span", { className: cssClasses.controlLabel }, itemText)),
