@@ -2,13 +2,16 @@
 .sv_q_matrix_dynamic .form-control {
   width: 100%;
 }
+
 .sv_matrix_dynamic_button {
   cursor: pointer;
   background: transparent;
   text-decoration: underline;
   padding: 0;
   color: #005ea5;
+  border: none;
 }
+
 .sv_matrix_dynamic_button:hover {
   color: #2b8cc4;
 }
