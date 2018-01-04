@@ -1,13 +1,12 @@
 var surveyJSON = {
-  showQuestionNumbers: "off",
   pages: [{
       elements: [{
         type: "html",
-        html: "<p>Read these notes carefully before completing the form.</p>\n<ul>\n<li>Tick the correct boxes and give as much information as\nyou can. It will help the court make a fair decision about\nhow much you can afford to pay if the claimant refuses\nyour offer.</li>\n<li>If you do not complete all the details and sign the form, the\ncourt will not be able to deal with your application.</li>\n<li>The form will be sent to the claimant to consider your offer.</li>\n<li>The court will send you an order giving details of how and\nwhen to pay or will tell you when to come to court. You will\nbe informed of the court’s decision.</li>\n<li>You will have to pay a fee for your application. You can get\ndetails of the fee to pay and information about what to do\nif you cannot pay all or part of a fee from any county court\noffice.</li>\n</ul>",
+        html: "<p>Read these notes carefully before completing the form.</p>\n<ul class=\"list-bullet\">\n<li>Tick the correct boxes and give as much information as\nyou can. It will help the court make a fair decision about\nhow much you can afford to pay if the claimant refuses\nyour offer.</li>\n<li>If you do not complete all the details and sign the form, the\ncourt will not be able to deal with your application.</li>\n<li>The form will be sent to the claimant to consider your offer.</li>\n<li>The court will send you an order giving details of how and\nwhen to pay or will tell you when to come to court. You will\nbe informed of the court’s decision.</li>\n<li>You will have to pay a fee for your application. You can get\ndetails of the fee to pay and information about what to do\nif you cannot pay all or part of a fee from any county court\noffice.</li>\n</ul>",
         name: "blurb"
       }],
       name: "Title Page",
-      title: "Application for suspension of a\nwarrant and/or variation of an order"
+      title: "Application for suspension of a warrant and/or variation of an order"
     },
     {
       elements: [{
@@ -35,7 +34,7 @@ var surveyJSON = {
           name: "title",
           isRequired: true,
           title: "Title",
-          type: "radiogroup",
+          type: "dropdown",
           choices: [{
               value: "mr",
               text: "Mr."
