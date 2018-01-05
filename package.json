@@ -6,7 +6,8 @@
   "author": "Alex Robinson <github@alex.fu2k.org>",
   "license": "MIT",
   "dependencies": {
-    "http-server": "^0.10.0"
+    "basic-auth": "^2.0.0",
+    "express": "^4.16.2"
   },
   "scripts": {
     "start": "http-server"
