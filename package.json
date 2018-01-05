@@ -1,0 +1,14 @@
+{
+  "name": "n245-surveyjs-experiment",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:ministryofjustice/n245-surveyjs-experiment.git",
+  "author": "Alex Robinson <github@alex.fu2k.org>",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^0.10.0"
+  },
+  "scripts": {
+    "start": "http-server"
+  }
+}
