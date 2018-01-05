@@ -34,8 +34,7 @@ jQuery(() => {
     logger('handleQuestionRender', question)
     const $question = jQuery(question.htmlElement)
     const isRequired = question.question.isRequired
-    const classMethod = isRequired ? 'removeClass' : 'addClass'
-    $question[classMethod]('form-control-optional')
+    $question.toggleClass('form-control-optional', !isRequired)
     updateUnclassedElements()
     // but it doesn't fire when errors change
     // so error updating on enclosing form-control element is in the setInterval method
@@ -56,12 +55,10 @@ jQuery(() => {
   const $body = jQuery('body')
   const setBackLink = () => {
     const firstPage = jQuery('.sv_prev_btn').length === 0
-    const bodyClassMethod = !firstPage ? 'addClass' : 'removeClass'
-    $body[bodyClassMethod]('hasPrev')
     const $nextButton = jQuery('.sv_next_btn')
-    const nextClassMethod = firstPage ? 'addClass' : 'removeClass'
     const nextVal = firstPage ? surveyJSON.startSurveyText : surveyJSON.pageNextText
-    $nextButton[nextClassMethod]('button-start')
+    $body.toggleClass('hasPrev', !firstPage)
+    $nextButton.toggleClass('button-start', firstPage)
     $nextButton.val(nextVal)
   }
 
@@ -86,8 +83,7 @@ jQuery(() => {
     jQuery('.form-group').each(function () {
       const $formGroup = jQuery(this)
       const hasErrors = !!jQuery('.error-message', $formGroup).length
-      const classMethod = hasErrors ? 'addClass' : 'removeClass'
-      $formGroup[classMethod]('form-group-error')
+      $formGroup.toggleClass('form-group-error', hasErrors)
     })
   }
 
