@@ -25,12 +25,12 @@ jQuery(() => {
   }
 
   const unclassedMap = {
-    'sv_qstn textarea': 'form-control'
+    '.sv_qstn textarea': 'form-control'
   }
 
   const updateUnclassedElements = e => {
     Object.keys(unclassedMap).forEach(classKey => {
-      jQuery(`.${classKey}`).addClass(unclassedMap[classKey])
+      jQuery(classKey).addClass(unclassedMap[classKey])
     })
   }
 
@@ -41,11 +41,13 @@ jQuery(() => {
     $question.toggleClass('form-control-optional', !isRequired)
     updateUnclassedElements()
     // but it doesn't fire when errors change
-    // so error updating on enclosing form-control element is in the setInterval method
+    // so error updating on enclosing form-control element is in the updateControlErrors method
   }
 
   const $body = jQuery('body')
   const updateNavigation = () => {
+    // Could possibly be handled by onCurrentPageChanged
+    // using the current page number rather than relying on the existence of the previous button
     const firstPage = jQuery('.sv_prev_btn').length === 0
     const $nextButton = jQuery('.sv_next_btn')
     const surveyData = getSurveyData()
@@ -56,6 +58,7 @@ jQuery(() => {
   }
 
   const updateMultipleChoice = () => {
+    // No method to override structure for checkbox and radiogroup exists
     jQuery('.multiple-choice > label > input').each(function() {
       const $input = jQuery(this)
       const $label = $input.parent()
@@ -68,6 +71,7 @@ jQuery(() => {
   }
 
   const updateControlErrors = () => {
+    // No equivalent to an onAfterRenderQuestionError event exists
     jQuery('.form-group').each(function () {
       const $formGroup = jQuery(this)
       const hasErrors = !!jQuery('.error-message', $formGroup).length
