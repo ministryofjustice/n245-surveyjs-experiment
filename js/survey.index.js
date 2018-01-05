@@ -20,13 +20,13 @@ jQuery(() => {
     logger('handleCurrentPageChanged')
   }
 
-  const classMap = {
+  const unclassedMap = {
     'sv_qstn textarea': 'form-control'
   }
 
-  const updateElements = e => {
-    Object.keys(classMap).forEach(classKey => {
-      jQuery(`.${classKey}`).addClass(classMap[classKey])
+  const updateUnclassedElements = e => {
+    Object.keys(unclassedMap).forEach(classKey => {
+      jQuery(`.${classKey}`).addClass(unclassedMap[classKey])
     })
   }
 
@@ -36,7 +36,7 @@ jQuery(() => {
     const isRequired = question.question.isRequired
     const classMethod = isRequired ? 'removeClass' : 'addClass'
     $question[classMethod]('form-control-optional')
-    updateElements()
+    updateUnclassedElements()
     // but it doesn't fire when errors change
     // so error updating on enclosing form-control element is in the setInterval method
   }
@@ -55,22 +55,29 @@ jQuery(() => {
 
   const $body = jQuery('body')
   const setBackLink = () => {
-    const classMethod = jQuery('.sv_prev_btn').length ? 'addClass' : 'removeClass'
-    $body[classMethod]('hasPrev')
+    const firstPage = jQuery('.sv_prev_btn').length === 0
+    const bodyClassMethod = !firstPage ? 'addClass' : 'removeClass'
+    $body[bodyClassMethod]('hasPrev')
+    const $nextButton = jQuery('.sv_next_btn')
+    const nextClassMethod = firstPage ? 'addClass' : 'removeClass'
+    const nextVal = firstPage ? surveyJSON.startSurveyText : surveyJSON.pageNextText
+    $nextButton[nextClassMethod]('button-start')
+    $nextButton.val(nextVal)
   }
 
   const updateMultipleChoice = () => {
     const $multichoice = jQuery('.multiple-choice')
     $multichoice.each(function () {
-      const lbl = jQuery(this).find('label').get(0)
-      const inp = jQuery(lbl).find('input').get(0)
-      if (inp) {
-        if (!inp.id) {
-          inp.id = jQuery(inp).closest('.form-group').attr('id') + jQuery(inp).val()
+      const $lbl = jQuery(this).find('label')
+      const $inp = jQuery('input', $lbl)
+      if ($inp.length) {
+        let inpId = $inp.attr('id')
+        if (!inpId) {
+          inpId = $inp.closest('.form-group').attr('id') + $inp.val()
+          $inp.attr('id', inpId)
         }
-        jQuery(lbl).attr('for', inp.id)
-        jQuery(inp).remove()
-        jQuery(lbl).before(inp)
+        $lbl.attr('for', inpId)
+        $inp.prependTo($lbl.parent())
       }
     })
   }

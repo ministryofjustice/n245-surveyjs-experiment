@@ -2,14 +2,13 @@ var surveyJSONDefaults = {
   showQuestionNumbers: "off",
   pagePrevText: "Back",
   pageNextText: "Continue",
-  startSurveyText: "Start right now",
+  startSurveyText: "Start",
   requiredText: "",
   cssClasses: {
     navigation: {
       next: "sv_next_btn button",
       start: "sv_start_btn"
     },
-
     pageTitle: "sv_page_title heading-large",
     question: {
         mainRoot: "sv_q sv_qstn form-group",
