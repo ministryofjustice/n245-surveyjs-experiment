@@ -86,7 +86,7 @@ var surveyJSON = {
               text: "Single"
             },
             {
-              value: "other",
+              value: "another",
               text: "Other"
             }
           ]
@@ -95,12 +95,13 @@ var surveyJSON = {
     },
     {
       name: "marital_status_other",
+      title: "Please give the details of your marital status",
       elements: [{
         name: "marital_status_other",
         isRequired: true,
-        title: "Please give the details of your marital status",
+        title: " ",
         type: "text",
-        visibleIf: "{marital_status} = 'other'"
+        visibleIf: "{marital_status} = 'another'"
       }]
     },
     {
