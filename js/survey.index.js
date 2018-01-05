@@ -1,4 +1,5 @@
 jQuery(() => {
+  const $body = jQuery('body')
 
   const logger = msg => {
     // console.log(msg)
@@ -18,9 +19,16 @@ jQuery(() => {
 
   const handleAfterRenderPage = () => {
     logger('handleAfterRenderPage')
+    const firstPage = survey.currentPageNo === 0
+    const $nextButton = jQuery('.sv_next_btn')
+    const surveyData = getSurveyData()
+    const nextButtonVal = firstPage ? surveyData.startSurveyText : surveyData.pageNextText
+    $body.toggleClass('hasPrev', !firstPage)
+    $nextButton.toggleClass('button-start', firstPage)
+    $nextButton.val(nextButtonVal)
   }
 
-  const handleCurrentPageChanged = () => {
+  const handleCurrentPageChanged = survey => {
     logger('handleCurrentPageChanged')
   }
 
@@ -42,19 +50,6 @@ jQuery(() => {
     updateUnclassedElements()
     // but it doesn't fire when errors change
     // so error updating on enclosing form-control element is in the updateControlErrors method
-  }
-
-  const $body = jQuery('body')
-  const updateNavigation = () => {
-    // Could possibly be handled by onCurrentPageChanged
-    // using the current page number rather than relying on the existence of the previous button
-    const firstPage = jQuery('.sv_prev_btn').length === 0
-    const $nextButton = jQuery('.sv_next_btn')
-    const surveyData = getSurveyData()
-    const nextButtonVal = firstPage ? surveyData.startSurveyText : surveyData.pageNextText
-    $body.toggleClass('hasPrev', !firstPage)
-    $nextButton.toggleClass('button-start', firstPage)
-    $nextButton.val(nextButtonVal)
   }
 
   const updateMultipleChoice = () => {
@@ -80,7 +75,6 @@ jQuery(() => {
   }
 
   const nonAPIUpdates = () => {
-    updateNavigation()
     updateControlErrors()
     updateMultipleChoice()
   }
