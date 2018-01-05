@@ -1,9 +1,13 @@
 jQuery(() => {
-  surveyJSON = Object.assign({}, surveyJSONDefaults, surveyJSON)
 
   const logger = msg => {
     // console.log(msg)
   }
+
+  const getSurveyData = () => {
+    return Object.assign({}, surveyJSONDefaults, surveyJSON)
+  }
+
   const sendDataToServer = survey => {
     logger('sendDataToServer', survey.data)
   }
@@ -30,52 +34,38 @@ jQuery(() => {
     })
   }
 
-  const handleQuestionRender = (e, question) => {
-    logger('handleQuestionRender', question)
-    const $question = jQuery(question.htmlElement)
-    const isRequired = question.question.isRequired
+  const handleQuestionRender = (e, questionModel) => {
+    logger('handleQuestionRender', questionModel)
+    const $question = jQuery(questionModel.htmlElement)
+    const isRequired = questionModel.question.isRequired
     $question.toggleClass('form-control-optional', !isRequired)
     updateUnclassedElements()
     // but it doesn't fire when errors change
     // so error updating on enclosing form-control element is in the setInterval method
   }
 
-  const survey = new Survey.Model(surveyJSON)
-
-  jQuery("#surveyContainer").Survey({
-    model: survey,
-    css: surveyJSON.cssClasses,
-    onComplete: sendDataToServer,
-    onAfterRenderPage: handleAfterRenderPage,
-    onCurrentPageChanged: handleCurrentPageChanged,
-    onAfterRenderSurvey: handleLoadSurvey,
-    onAfterRenderQuestion: handleQuestionRender
-  })
-
   const $body = jQuery('body')
-  const setBackLink = () => {
+  const updateNavigation = () => {
     const firstPage = jQuery('.sv_prev_btn').length === 0
     const $nextButton = jQuery('.sv_next_btn')
-    const nextVal = firstPage ? surveyJSON.startSurveyText : surveyJSON.pageNextText
+    const surveyData = getSurveyData()
+    const nextButtonVal = firstPage ? surveyData.startSurveyText : surveyData.pageNextText
     $body.toggleClass('hasPrev', !firstPage)
     $nextButton.toggleClass('button-start', firstPage)
-    $nextButton.val(nextVal)
+    $nextButton.val(nextButtonVal)
   }
 
   const updateMultipleChoice = () => {
-    const $multichoice = jQuery('.multiple-choice')
-    $multichoice.each(function () {
-      const $lbl = jQuery(this).find('label')
-      const $inp = jQuery('input', $lbl)
-      if ($inp.length) {
-        let inpId = $inp.attr('id')
-        if (!inpId) {
-          inpId = $inp.closest('.form-group').attr('id') + $inp.val()
-          $inp.attr('id', inpId)
-        }
-        $lbl.attr('for', inpId)
-        $inp.prependTo($lbl.parent())
+    jQuery('.multiple-choice > label > input').each(function() {
+      const $input = jQuery(this)
+      const $label = $input.parent()
+      let inputId = $input.attr('id')
+      if (!inputId) {
+        inputId = $input.closest('.form-group').attr('id') + $input.val()
+        $input.attr('id', inputId)
       }
+      $label.attr('for', inputId)
+      $input.prependTo($label.parent())
     })
   }
 
@@ -87,10 +77,24 @@ jQuery(() => {
     })
   }
 
-  setInterval(() => {
+  const nonAPIUpdates = () => {
+    updateNavigation()
     updateControlErrors()
-    setBackLink()
     updateMultipleChoice()
-  }, 10)
+  }
+
+  const survey = new Survey.Model(getSurveyData())
+
+  jQuery("#surveyContainer").Survey({
+    model: survey,
+    css: getSurveyData().cssClasses,
+    onComplete: sendDataToServer,
+    onAfterRenderPage: handleAfterRenderPage,
+    onCurrentPageChanged: handleCurrentPageChanged,
+    onAfterRenderSurvey: handleLoadSurvey,
+    onAfterRenderQuestion: handleQuestionRender
+  })
+
+  setInterval(nonAPIUpdates, 10)
 
 })
