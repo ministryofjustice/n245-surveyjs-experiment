@@ -59,11 +59,9 @@ jQuery(() => {
     jQuery('.multiple-choice > label > input').each(function() {
       const $input = jQuery(this)
       const $label = $input.parent()
-      let inputId = $input.attr('id')
-      if (!inputId) {
-        inputId = $input.closest('.form-group').attr('id') + $input.val()
-        $input.attr('id', inputId)
-      }
+      // set inputId every time, otherwise surveyjs gets ids of elements out of sync on second pass
+      const inputId = $input.attr('name') + $input.val()
+      $input.attr('id', inputId)
       $label.attr('for', inputId)
       $input.prependTo($label.parent())
     })
