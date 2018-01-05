@@ -1,0 +1,69 @@
+/* .site-wrapper .form-control, */
+.sv_q_matrix_dynamic .form-control {
+  width: 100%;
+}
+
+.sv_matrix_dynamic_button {
+  cursor: pointer;
+  background: transparent;
+  text-decoration: underline;
+  padding: 0;
+  color: #005ea5;
+  border: none;
+}
+
+.sv_matrix_dynamic_button:hover {
+  color: #2b8cc4;
+}
+
+.sv_container {
+  position: relative;
+}
+  
+.sv_p_root {
+  padding-top: 0;
+  position: relative;
+}
+.hasPrev .sv_p_root {
+  padding-top: 2rem;
+}
+
+.form-control-optional h5::after,
+.form-control-optional label::after {
+  content: ' (optional)';
+}
+
+input.sv_prev_btn {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  display: -moz-inline-stack;
+  display: inline-block;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.14286;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-left: 14px;
+  padding-right: 0;
+  color: #0b0c0c;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #0b0c0c;
+}
+
+.hasPrev .sv_nav::before {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-right: 6px solid #0b0c0c;
+  border-bottom: 5px solid transparent;
+  position: absolute;
+  left: 0;
+  top: 17px;
+}
